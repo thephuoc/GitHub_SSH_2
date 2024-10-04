@@ -5,3 +5,94 @@ git@hub1:thephuoc/GitHub_SSH_2.git
 hub2 thephuoc@outlook.com
 
 git@hub2:thephuoc160/Git_Push_SSH.git
+
+
+
+======
+Cai lai Win 04.10.2024
+======
+
+git config user.email "thephuoc@live.com"
+fatal: not in a git directory
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH
+$ git init
+Reinitialized existing Git repository in D:/12. Github SH/.git/
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH
+$ git add .
+fatal: detected dubious ownership in repository at 'D:/12. Github SH'
+'D:/12. Github SH' is owned by:
+        (inconvertible) (S-1-5-21-688408851-3229323070-1102274849-1001)
+but the current user is:
+        THEPHUOC/THEPHUOC (S-1-5-21-4177989446-117991016-1628260119-1001)
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory 'D:/12. Github SH'
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH
+$  git config --global --add safe.directory 'D:/12. Github SH'
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git add .
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git config user.email "thephuoc@live.com"
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git config user.name  "thephuoc"
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ ssh-add /c/Users/THEPHUOC/.ssh/id_ed25519_hub1
+/c/Users/THEPHUOC/.ssh/id_ed25519_hub1: No such file or directory
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ ssh-add /c/Users/THEPHUOC/.ssh/id_ed25519_hub1
+Identity added: /c/Users/THEPHUOC/.ssh/id_ed25519_hub1 (thephuoc@live.com)
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ ssh-add /c/Users/THEPHUOC/.ssh/id_ed25519_hub2
+Identity added: /c/Users/THEPHUOC/.ssh/id_ed25519_hub2 (thephuoc@outlook.com)
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git remote set-url origin git@hub1:thephuoc/GitHub_SSH_2.git
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git commit -m "$(date +%d-%m-%Y) new add file with random number"
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git commit -m "$(date +%d-%m-%Y) new add file with random number"
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git commit -m "$(date +%d-%m-%Y) new add file with random number"
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        index - Copy.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$ git push -u origin master --force
+Everything up-to-date
+branch 'master' set up to track 'origin/master'.
+
+THEPHUOC@THEPHUOC MINGW64 /d/12. Github SH (master)
+$
+okkkkkkk
