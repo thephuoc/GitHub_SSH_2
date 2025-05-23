@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Reading a Text File</title>
-	<script>
-		window.onload = function() {
-			var fileInput = document.getElementById('fileInput');
-			var fileDisplayArea = document.getElementById('fileDisplayArea');
+ <title>Reading a Text File</title>
+ <style>
+ .number {
+ display: inline-block;
+ margin: 5px;
+ }
+ </style>
+ <script>
+ window.onload = function() {
+ var fileInput = document.getElementById('fileInput');
+ var fileDisplayArea = document.getElementById('fileDisplayArea');
 
-			fileInput.addEventListener('change', function(e) {
-				var file = fileInput.files[0];
-				var reader = new FileReader();
+ fileInput.addEventListener('change', function(e) {
+ var file = fileInput.files[0];
+ var reader = new FileReader();
 
-				reader.onload = function(e) {
-					var lines = e.target.result.split('\n');
-					fileDisplayArea.innerText = lines.join('\n');
+ reader.onload = function(e) {
+ var lines = e.target.result.split('\n');
+ fileDisplayArea.innerHTML = ''; // Clear previous content
+
+ lines.forEach(function(line) {
+ var numberSpan = document.createElement('span');
+ numberSpan.classList.add('number');
+ numberSpan.innerText = line;
+ numberSpan.style.color = '#' + Math.floor(Math.random()*16777215).toString(16); // Random color
+ fileDisplayArea.appendChild(numberSpan);
+ });
 				}
 
 				reader.readAsText(file);
@@ -22,11 +36,11 @@
 	</script>
 </head>
 <body>
-	<input type="file" id="fileInput">
-	<pre id="fileDisplayArea"></pre>
+ <input type="file" id="fileInput">
+ <div id="fileDisplayArea"></div>
 </body>
 </html>
-3274
+
 
 22878
 23603
@@ -351,5 +365,3 @@
 30477
 25722
 17887
-16956
-
