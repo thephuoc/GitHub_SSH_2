@@ -1,370 +1,142 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Reading a Text File</title>
+ <title>Hiển Thị Số Từ File Với Định Dạng Cột</title>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <script src="https://cdn.tailwindcss.com"></script>
  <style>
- .number {
- display: inline-block;
- margin: 5px;
- }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f3f4f6; /* Tailwind gray-100 */
+        color: #1f2937; /* Tailwind gray-800 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        width: 100%;
+        max-width: 90%; /* Tăng max-width để có không gian cho nhiều cột hơn */
+    }
+    h1 {
+        font-size: 1.5rem; /* Tailwind text-2xl */
+        font-weight: 600; /* Tailwind font-semibold */
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    input[type="file"] {
+        display: block;
+        margin: 0 auto 1.5rem auto;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d1d5db; /* Tailwind gray-300 */
+        border-radius: 0.375rem; /* Tailwind rounded-md */
+        cursor: pointer;
+    }
+    input[type="file"]:hover {
+        border-color: #9ca3af; /* Tailwind gray-400 */
+    }
+    #fileDisplayArea {
+        margin-top: 1rem;
+        padding: 1rem;
+        border: 1px dashed #d1d5db; /* Tailwind gray-300 */
+        border-radius: 0.375rem; /* Tailwind rounded-md */
+        min-height: 100px;
+        background-color: #f9fafb; /* Tailwind gray-50 */
+        
+        /* --- CSS Grid cho layout cột --- */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Tạo cột tự động co giãn */
+        gap: 10px; /* Khoảng cách giữa các ô số */
+    }
+    .number-item {
+        padding: 8px 10px; /* Tăng padding một chút */
+        border-radius: 0.375rem; /* Tailwind rounded-md */
+        font-size: 1rem; /* Tailwind text-base */
+        line-height: 1.5;
+        /* Màu và font-weight sẽ được đặt bởi JavaScript */
+        text-align: center; /* Căn giữa số trong ô */
+        background-color: #ffffff; /* Nền trắng cho mỗi ô số */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Thêm bóng nhẹ */
+        word-break: break-all; /* Ngắt từ cho các số quá dài */
+        box-sizing: border-box;
+    }
  </style>
  <script>
  window.onload = function() {
- var fileInput = document.getElementById('fileInput');
- var fileDisplayArea = document.getElementById('fileDisplayArea');
+    // Lấy các phần tử DOM
+    var fileInput = document.getElementById('fileInput');
+    var fileDisplayArea = document.getElementById('fileDisplayArea');
 
- fileInput.addEventListener('change', function(e) {
- var file = fileInput.files[0];
- var reader = new FileReader();
+    // Thêm sự kiện 'change' cho input file
+    fileInput.addEventListener('change', function(e) {
+        var file = fileInput.files[0]; // Lấy file đầu tiên người dùng chọn
+        if (!file) {
+            fileDisplayArea.innerHTML = '<p class="text-red-500 col-span-full">Vui lòng chọn một file.</p>'; // col-span-full để message chiếm toàn bộ chiều rộng grid
+            return;
+        }
 
- reader.onload = function(e) {
- var lines = e.target.result.split('\n');
- fileDisplayArea.innerHTML = ''; // Clear previous content
+        var reader = new FileReader(); // Tạo đối tượng FileReader
 
- lines.forEach(function(line) {
- var numberSpan = document.createElement('span');
- numberSpan.classList.add('number');
- numberSpan.innerText = line;
- numberSpan.style.color = '#' + Math.floor(Math.random() * 16777215).toString(16); // Random color
+        // Sự kiện được kích hoạt khi file đã được đọc xong
+        reader.onload = function(e) {
+            // Tách nội dung file thành các dòng, loại bỏ dòng trống và khoảng trắng thừa ở mỗi số
+            var lines = e.target.result.split(/[\r\n]+/)
+                                     .map(line => line.trim())
+                                     .filter(line => line !== ''); 
+            fileDisplayArea.innerHTML = ''; // Xóa nội dung cũ trong khu vực hiển thị
 
- // Make numbers from line 43 onwards bold
- if (lines.indexOf(line) >= 42) { // Array index is 0-based, so line 43 is index 42
- numberSpan.style.fontWeight = 'bold';
+            if (lines.length === 0) {
+                fileDisplayArea.innerHTML = '<p class="text-gray-500 col-span-full">File rỗng hoặc không chứa số hợp lệ.</p>'; // col-span-full
+                return;
+            }
+
+            // Lặp qua từng dòng (mỗi dòng được coi là một số)
+            lines.forEach(function(lineContent) {
+                // Tạo một thẻ div để chứa số (div phù hợp hơn cho grid item)
+                var numberDiv = document.createElement('div');
+                numberDiv.classList.add('number-item'); // Thêm class CSS
+                numberDiv.innerText = lineContent; // Gán nội dung dòng
+
+                // Tạo màu ngẫu nhiên và đảm bảo là 6 ký tự hex
+                var randomColor = '#' + ('000000' + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
+                numberDiv.style.color = randomColor; // Đặt màu cho số
+
+                // Bôi đậm tất cả các số
+                numberDiv.style.fontWeight = 'bold';
+
+                // Thêm thẻ div chứa số vào khu vực hiển thị
+                fileDisplayArea.appendChild(numberDiv);
+            });
+        }
+
+        // Xử lý lỗi nếu có
+        reader.onerror = function() {
+            fileDisplayArea.innerHTML = '<p class="text-red-500 col-span-full">Không thể đọc file. Đã có lỗi xảy ra.</p>'; // col-span-full
+            console.error("Lỗi khi đọc file:", reader.error);
+        };
+
+        // Đọc nội dung file dưới dạng text
+        reader.readAsText(file);
+    });
  }
- fileDisplayArea.appendChild(numberSpan);
- });
-				}
-
-				reader.readAsText(file);
-			});
-		}
-	</script>
+ </script>
 </head>
 <body>
- <input type="file" id="fileInput">
- <div id="fileDisplayArea"></div>
+    <div class="container">
+        <h1>Hiển Thị Số Từ File Theo Cột</h1>
+        <p class="text-center mb-4 text-gray-600">Chọn một file text chứa các số (mỗi số trên một dòng) để xem chúng được tô màu, bôi đậm và sắp xếp theo cột tự động co giãn.</p>
+        <input type="file" id="fileInput" accept=".txt, .text, .csv">
+
+        <div id="fileDisplayArea">
+            <p class="text-gray-500 col-span-full">Nội dung file sẽ được hiển thị ở đây sau khi bạn chọn file.</p> </div>
+    </div>
 </body>
 </html>
-22878
-23603
-25260
-3
-31989
-28835
-25652
-23355
-12042
-20547
-26655
-22979
-9478
-9674
-23635
-21759
-14120
-5769
-32354
-11593
-30477
-25722
-17887
-16956
-18519
-31220
-25117
-20370
-25508
-31522
-3394
-39
-18739
-31852
-5519
-11354
-29750
-32269
-29224
-32473
-16888
-1102
-1848
-25317
-7815
-20614
-10065
-18448
-32087
-5375
-11202
-10474
-15528
-4259
-20813
-15351
-9311
-18768
-18406
-15194
-4746
-25788
-9029
-22878
-23603
-25260
-3339
-22364
-23739
-2166
-25838
-2641
-8746
-2198
-8530
-1151
-14351
-22644
-22162
-14078
-30267
-27501
-30134
-15464
-13373
-5379
-30315
-20997
-25931
-30828
-28514
-24991
-6966
-274
-2093
-11222
-8970
-9427
-14383
-22406
-21665
-26898
-3274
-31989
-28835
-25652
-23355
-12042
-20547
-26655
-22979
-9478
-9674
-23635
-21759
-14120
-5769
-32354
-11593
-30477
-25722
-17887
-16956
-18519
-31220
-25117
-20370
-25508
-31522
-3394
-39
-18739
-31852
-5519
-11354
-29750
-32269
-29224
-32473
-16888
-1102
-1848
-25317
-7815
-20614
-10065
-18448
-32087
-5375
-11202
-10474
-15528
-4259
-20813
-15351
-9311
-18768
-18406
-15194
-4746
-25788
-9029
-22878
-23603
-25260
-3339
-22364
-23739
-2166
-25838
-2641
-8746
-2198
-8530
-1151
-14351
-22644
-22162
-14078
-30267
-27501
-30134
-15464
-13373
-5379
-30315
-20997
-25931
-30828
-28514
-24991
-6966
-274
-2093
-11222
-8970
-9427
-14383
-22406
-21665
-26898
-27819
-3274
-31989
-28835
-25652
-23355
-12042
-20547
-26655
-22979
-9478
-9674
-23635
-21759
-14120
-5769
-32354
-11593
-30477
-25722
-17887
-16956
-18519
-31220
-25117
-20370
-25508
-31522
-3394
-39
-18739
-31852
-5519
-11354
-29750
-32269
-29224
-32473
-16888
-1102
-1848
-25317
-7815
-20614
-10065
-18448
-32087
-5375
-11202
-10474
-15528
-4259
-20813
-15351
-9311
-18768
-18406
-15194
-4746
-25788
-9029
-22878
-23603
-25260
-3339
-22364
-23739
-2166
-25838
-2641
-8746
-2198
-8530
-1151
-14351
-22644
-22162
-14078
-30267
-27501
-30134
-15464
-13373
-5379
-30315
-20997
-25931
-30828
-28514
-24991
-6966
-274
-2093
-11222
-8970
-9427
-14383
-22406
-21665
-26898
-27819
-17573
-3274
-31989
-28835
-25652
-23355
-12042
-20547
-26655
-22979
-9478
-9674
-23635
-21759
-14120
-5769
-32354
-11593
-30477
-25722
-17887
