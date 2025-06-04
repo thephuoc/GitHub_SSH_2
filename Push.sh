@@ -36,8 +36,11 @@ fi
 # Read the contents of the `text.txt` file
 text=$(cat "$current_directory/text.txt")
 
-# Add the body of the `text.txt` file to the `index.html` file
-echo "$text" >> "$current_directory/index.html"
+# Đọc từng dòng trong text.txt và thêm \n vào cuối từng dòng
+text=$(awk '{printf "%s\\\\n", $0}' "$current_directory/text.txt")
+
+# Ghi đè dòng 168 trong index.html bằng dòng mới
+sed -i "168s|.*|const numbersStringFromFileEnd = \"$text\";|" "$current_directory/index.html"
 
 # Save the changes to the `index.html` file
 git add "$current_directory/index.html"
